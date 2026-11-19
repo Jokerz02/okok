@@ -2,91 +2,96 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>World Map 2000 BC - Interactive</title>
-<style>
-body { margin: 0; font-family: system-ui, sans-serif; background: #1a1a2e; color: #eee; }
-#map-container { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
-svg { width: 100%; height: 100%; background: #0d1b2a; }
-.region { stroke: #fff; stroke-width: 0.5; cursor: pointer; transition: opacity 0.2s, filter 0.2s; }
-.region:hover { opacity: 0.85; filter: brightness(1.2); }
-#tooltip { position: absolute; background: rgba(0,0,0,0.85); color: white; padding: 8px 12px; border-radius: 6px; pointer-events: none; display: none; max-width: 300px; z-index: 100; font-size: 14px; }
-#info { position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.7); padding: 15px; border-radius: 8px; max-width: 350px; }
-h1 { margin: 0 0 10px; font-size: 1.5em; }
-.legend { margin-top: 10px; font-size: 0.9em; }
-.legend-item { display: flex; align-items: center; margin: 4px 0; }
-.swatch { width: 16px; height: 16px; margin-right: 8px; border: 1px solid #fff; }
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2000 BC World Map — Interactive Webapp</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div id="map-container">
-  <div id="info">
+<div class="app">
+  <header>
     <h1>World in 2000 BC</h1>
-    <p>Approximate territories of major civilizations and cultures. Borders were fluid; hover for details. Based on historical reconstructions.</p>
-    <div class="legend">
-      <div class="legend-item"><div class="swatch" style="background:#4a90d9"></div> State societies / empires</div>
-      <div class="legend-item"><div class="swatch" style="background:#f5a623"></div> Complex farming / chiefdoms</div>
-      <div class="legend-item"><div class="swatch" style="background:#7ed321"></div> Simple farming societies</div>
-      <div class="legend-item"><div class="swatch" style="background:#9013fe"></div> Nomadic pastoralists</div>
-      <div class="legend-item"><div class="swatch" style="background:#f8e71c"></div> Hunter-gatherers</div>
+    <p class="subtitle">Early Bronze Age civilizations & cultural regions</p>
+  </header>
+
+  <div class="main">
+    <aside class="sidebar">
+      <div class="search-box">
+        <input type="text" id="search" placeholder="Search civilizations...">
+      </div>
+      <div class="legend">
+        <div class="legend-item"><span class="swatch state"></span> States / empires</div>
+        <div class="legend-item"><span class="swatch complex"></span> Complex societies</div>
+        <div class="legend-item"><span class="swatch pastoral"></span> Pastoralists</div>
+        <div class="legend-item"><span class="swatch farming"></span> Farming cultures</div>
+      </div>
+      <ul id="region-list" class="region-list"></ul>
+    </aside>
+
+    <div class="map-area">
+      <svg id="world-map" viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+        <!-- Oceans / background -->
+        <rect width="1200" height="600" fill="#0f172a"/>
+
+        <!-- Stylized continents -->
+        <g id="continents" fill="#1e293b" stroke="#334155" stroke-width="1.5">
+          <!-- Eurasia -->
+          <path d="M180 120 C 250 90, 400 100, 520 130 L 650 150 C 750 160, 880 140, 980 170 L 1050 200 C 1100 220, 1080 280, 1020 310 L 900 340 C 800 360, 700 340, 600 360 L 480 380 C 400 400, 300 380, 220 350 L 150 300 C 120 250, 140 180, 180 120 Z"/>
+          <!-- Africa -->
+          <path d="M480 340 C 520 320, 560 360, 580 420 L 570 500 C 540 540, 500 550, 460 530 L 430 480 C 410 430, 440 370, 480 340 Z"/>
+          <!-- North America -->
+          <path d="M80 100 C 120 80, 160 100, 180 140 L 170 220 C 150 260, 110 250, 80 210 L 60 150 C 55 120, 65 105, 80 100 Z"/>
+          <!-- South America -->
+          <path d="M90 280 C 130 260, 160 300, 170 380 L 150 480 C 130 520, 100 510, 80 460 L 70 380 C 65 330, 75 290, 90 280 Z"/>
+          <!-- Australia -->
+          <path d="M920 420 C 960 400, 1000 430, 1010 460 L 990 500 C 960 520, 930 510, 910 480 L 905 450 C 910 430, 915 425, 920 420 Z"/>
+        </g>
+
+        <!-- Interactive regions -->
+        <g id="regions">
+          <!-- Egypt -->
+          <polygon points="510,360 535,345 545,390 525,420 505,400" class="region state" data-id="egypt"/>
+          <!-- Mesopotamia -->
+          <polygon points="560,250 600,240 615,290 585,320 555,290" class="region state" data-id="mesopotamia"/>
+          <!-- Elam -->
+          <polygon points="615,270 650,260 665,300 640,325 610,295" class="region state" data-id="elam"/>
+          <!-- Indus Valley -->
+          <polygon points="700,280 760,265 785,320 740,355 695,325" class="region state" data-id="indus"/>
+          <!-- Minoans -->
+          <polygon points="540,200 565,190 575,215 550,225" class="region complex" data-id="minoan"/>
+          <!-- Early China -->
+          <polygon points="880,220 940,205 965,250 920,275 875,245" class="region complex" data-id="china"/>
+          <!-- Pastoralists (steppe) -->
+          <polygon points="650,160 780,145 810,195 720,215 640,185" class="region pastoral" data-id="steppe"/>
+          <!-- Amorite / Levant area -->
+          <polygon points="530,280 560,270 570,310 545,330 525,305" class="region complex" data-id="amorites"/>
+          <!-- Nubia / Kerma -->
+          <polygon points="500,420 520,410 530,450 510,470 495,445" class="region complex" data-id="nubia"/>
+        </g>
+      </svg>
+      <div class="map-controls">
+        <button id="zoom-in">+</button>
+        <button id="zoom-out">−</button>
+        <button id="reset-view">Reset</button>
+      </div>
     </div>
+
+    <aside class="detail-panel" id="detail-panel">
+      <div class="detail-placeholder">
+        <h2>Select a region</h2>
+        <p>Click a colored area on the map or choose from the list to learn about the civilizations of 2000 BC.</p>
+        <p class="note">Borders were approximate and often fluid. Many regions were inhabited by non-state societies.</p>
+      </div>
+      <div class="detail-content" id="detail-content" hidden>
+        <button class="close-detail" id="close-detail">×</button>
+        <h2 id="detail-title"></h2>
+        <div class="tags" id="detail-tags"></div>
+        <p id="detail-desc"></p>
+        <ul id="detail-facts"></ul>
+      </div>
+    </aside>
   </div>
-  <svg viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg">
-    <!-- Simplified continents outline (stylized) -->
-    <path d="M150 150 Q200 100 300 120 L400 140 Q450 160 500 150 L550 180 Q600 200 650 180 L700 200 Q750 220 800 200 L850 220 Q900 200 920 180 L900 250 Q850 280 800 270 L750 300 Q700 320 650 300 L600 320 Q550 340 500 320 L450 350 Q400 370 350 350 L300 380 Q250 400 200 380 L150 360 Z" fill="#2a3a4a" stroke="#4a6a8a" stroke-width="1" id="eurasia"/>
-    <!-- Africa -->
-    <path d="M400 300 Q450 280 480 320 L500 400 Q480 450 450 470 L420 480 Q380 470 360 440 L350 380 Q360 340 400 300 Z" fill="#2a3a4a" stroke="#4a6a8a"/>
-    <!-- Americas simplified -->
-    <path d="M80 120 Q120 100 150 140 L160 200 Q140 250 100 240 L70 200 Q60 150 80 120 Z" fill="#2a3a4a" stroke="#4a6a8a"/>
-    <path d="M90 280 Q130 260 150 300 L160 400 Q140 450 100 440 L70 400 Q60 340 90 280 Z" fill="#2a3a4a" stroke="#4a6a8a"/>
-    <!-- Australia -->
-    <path d="M780 380 Q820 360 850 390 L860 420 Q840 450 800 440 L770 410 Q760 390 780 380 Z" fill="#2a3a4a" stroke="#4a6a8a"/>
-
-    <!-- Regions / polities (approximate positions on this stylized map) -->
-    <!-- Egypt - Nile -->
-    <polygon points="430,310 450,300 460,340 450,370 430,360" fill="#4a90d9" class="region" data-name="Egypt (Middle Kingdom)" data-info="Around 2000 BC, the Middle Kingdom of Egypt was consolidating under the 11th Dynasty after the First Intermediate Period. Centered on the Nile Valley from the Delta to Nubia. Pharaohs like Mentuhotep II reunified the country. Known for literature, trade, and monumental building."/>
-
-    <!-- Mesopotamia - Tigris-Euphrates -->
-    <polygon points="480,220 510,210 520,250 500,270 470,250" fill="#4a90d9" class="region" data-name="Mesopotamia (post-Ur III)" data-info="The Third Dynasty of Ur collapsed around 2004 BC. City-states like Isin and Larsa competed. Amorite groups were rising. Early Assyria in the north. Birthplace of writing, law codes, and urban civilization. Cuneiform culture dominant."/>
-
-    <!-- Elam -->
-    <polygon points="520,240 550,230 560,260 540,280 510,260" fill="#4a90d9" class="region" data-name="Elam" data-info="Elamite kingdom in southwestern Iran, rival to Mesopotamian states. Around 2000 BC under the Simashki dynasty. Influenced by and influencing Sumerian/Akkadian culture. Controlled trade routes."/>
-
-    <!-- Indus Valley -->
-    <polygon points="580,250 630,240 650,280 620,310 580,290" fill="#4a90d9" class="region" data-name="Indus Valley Civilization" data-info="Mature Harappan phase. Major cities like Mohenjo-daro and Harappa with advanced urban planning, drainage, standardized weights. Extensive trade with Mesopotamia. Writing system undeciphered. Began declining later in the millennium."/>
-
-    <!-- Minoans - Crete -->
-    <polygon points="470,190 490,180 500,200 480,210" fill="#f5a623" class="region" data-name="Minoan Civilization" data-info="Palace culture on Crete around 2000 BC (Middle Minoan). Knossos and other palaces. Advanced maritime trade, Linear A writing (undeciphered), sophisticated art and architecture. Influenced later Mycenaeans."/>
-
-    <!-- Early China / Longshan / Xia -->
-    <polygon points="720,200 760,190 780,220 750,240 710,220" fill="#f5a623" class="region" data-name="Early Chinese cultures (Longshan / Xia)" data-info="Longshan culture and proto-Xia period in the Yellow River valley. Increasing social complexity, bronze working emerging, walled settlements. Traditional Xia dynasty (semi-legendary) associated with this era. Rice and millet agriculture."/>
-
-    <!-- Pastoralists example - steppe -->
-    <polygon points="550,150 650,140 670,180 600,190 540,170" fill="#9013fe" class="region" data-name="Central Asian pastoralists" data-info="Nomadic and semi-nomadic groups in the steppes. Early Indo-European expansions beginning. Horse domestication, chariot technology spreading. Influenced later cultures in Europe and South Asia."/>
-
-    <!-- Hunter-gatherers / others as background or additional -->
-  </svg>
-  <div id="tooltip"></div>
 </div>
 
-<script>
-const regions = document.querySelectorAll('.region');
-const tooltip = document.getElementById('tooltip');
-
-regions.forEach(region => {
-  region.addEventListener('mouseenter', (e) => {
-    const name = region.getAttribute('data-name');
-    const info = region.getAttribute('data-info');
-    tooltip.innerHTML = `<strong>${name}</strong><br>${info}`;
-    tooltip.style.display = 'block';
-  });
-  region.addEventListener('mousemove', (e) => {
-    tooltip.style.left = (e.pageX + 15) + 'px';
-    tooltip.style.top = (e.pageY + 15) + 'px';
-  });
-  region.addEventListener('mouseleave', () => {
-    tooltip.style.display = 'none';
-  });
-});
-</script>
+<script src="app.js"></script>
 </body>
 </html>

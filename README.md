@@ -1,21 +1,34 @@
-# World Map 2000 BC
+# 2000 BC World Map — Interactive Webapp
 
-Interactive world map showing approximate territories of major civilizations, empires, and cultural groups around 2000 BC.
+A self-contained web application showing approximate territories of major civilizations and cultural regions around 2000 BC (early Bronze Age).
 
 ## Features
-- Hover over colored regions for tooltips with historical information
-- Simplified stylized map focused on key polities
-- Legend for social organization types
+- Interactive SVG world map with clickable regions
+- Sidebar list of civilizations (searchable)
+- Detail panel with historical summary and key facts
+- Pan and zoom controls
+- Color-coded by social organization type
+- Fully responsive layout
+- No external dependencies — pure HTML/CSS/JS
 
-## Major entities around 2000 BC
-- **Egypt (Middle Kingdom)**: Reunifying under 11th Dynasty
-- **Mesopotamia**: Post-Ur III city-states, rising Amorites
-- **Elam**: Simashki dynasty
-- **Indus Valley Civilization**: Mature Harappan urban culture
-- **Minoan Crete**: Palace period beginning
-- **Early China**: Longshan culture / traditional Xia period
-- Various pastoralist and farming societies
+## How to run
+1. Clone the repository
+2. Open `index.html` in any modern browser
+   - Or serve locally: `python -m http.server` or `npx serve`
 
-**Note**: Historical borders were not fixed like modern nation-states. This is an approximate reconstruction for educational purposes. Data drawn from standard historical sources on the early Bronze Age.
+## Historical note
+True fixed nation-state borders did not exist in 2000 BC. The colored areas represent approximate core territories and spheres of influence based on standard historical and archaeological reconstructions. Many regions were occupied by non-state societies, pastoralists, or farming cultures.
 
-Open `index.html` in a browser to view.
+## Major entities included
+- Egypt (Middle Kingdom, 11th Dynasty)
+- Mesopotamia (post-Ur III city-states)
+- Elam (Simashki dynasty)
+- Indus Valley Civilization (Mature Harappan)
+- Minoan Crete (early palaces)
+- Early China (Longshan / traditional Xia)
+- Central Asian pastoralists
+- Amorite groups
+- Kerma culture (Nubia)
+
+## License
+Educational / open use. Historical data is approximate.
